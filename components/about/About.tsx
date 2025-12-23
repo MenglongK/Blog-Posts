@@ -5,14 +5,14 @@ import Link from "next/link";
 export default function About() {
   
   return (
-    <section className="min-h-screen bg-primary text-black/70 py-16 px-6 flex flex-col md:flex-row items-center justify-between gap-8">
+    <section className="min-h-screen bg-primary text-black/70 py-16 px-6 flex flex-col md:flex-row items-center justify-between gap-15">
       <div className="w-full md:w-5/12 flex justify-center h-full md:justify-end">
         <Image
           src="/images/photo.png"
           alt="About Us"
           width={300}
           height={300}
-          className="rounded-lg shadow-lg object-cover"
+          className="rounded-xl object-cover"
         />
       </div>
       <div className="w-full md:w-7/12 text-center md:text-left relative">
@@ -24,12 +24,12 @@ export default function About() {
         </div>
 
         <h2 className="text-3xl md:text-5xl font-bold leading-tight mb-4 pl-10">
-          A Passionate <br /> Software Developer
+          A Passionate <br /> <span className="text-indigo-600">Software Developer</span>
         </h2>
 
-        <p className="text-black/50 mb-6 text-sm md:text-base leading-relaxed max-w-2xl mx-auto md:mx-0">
-          I’m Abdul Baset, a passionate Software Developer with expertise in
-          Vue.js, Laravel, & modern web technologies. I specialize in building
+        <p className="text-black/50 mb-6 text-sm md:text-base leading-relaxed max-w-2xl mx-auto md:mx-0 text-justify">
+          I’m <b className="text-xl text-indigo-600">Menglong Keo</b>, a passionate Software Developer with expertise in
+          Next.js, Java, & modern web technologies. I specialize in building
           user-friendly applications that solve real-world problems. With a deep
           understanding of frontend development, state management, and API
           integration, I can bring your ideas to life.
