@@ -8,7 +8,7 @@ export default function About() {
     <section className="min-h-screen bg-primary text-black/70 py-16 px-6 flex flex-col md:flex-row items-center justify-between gap-8">
       <div className="w-full md:w-5/12 flex justify-center h-full md:justify-end">
         <Image
-          src="/images/photo.jpg"
+          src="/images/photo.png"
           alt="About Us"
           width={300}
           height={300}
