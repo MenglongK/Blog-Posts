@@ -8,7 +8,7 @@ export default function Navbar() {
         <div className="grid md:grid-cols-3 max-sm:grid-cols-2 gap-4 md:justify-between">
           <div className="flex shrink-0">
             <Link href="/">
-              <Image src="/logo.png" alt="logo" width={40} height={40} />
+              <Image src="/images/logo.png" alt="logo" width={40} height={40} />
             </Link>
           </div>
           <div className="md:flex md:items-center md:justify-center md:gap-5">

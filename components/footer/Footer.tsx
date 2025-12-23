@@ -7,7 +7,7 @@ export default function Footer() {
       <div className="container px-4 mx-auto max-sm:text-center">
         <div className="pt-24 pb-11 mx-auto max-w-4xl">
           <Link className="block md:mx-auto mb-5 max-w-max" href="/">
-            <Image src="/logo.png" alt="logo" width={60} height={60} />
+            <Image src="/images/logo.png" alt="logo" width={60} height={60} />
           </Link>
           <div className="flex flex-wrap justify-center -mx-3 lg:-mx-6">
             <div className="w-full md:w-auto p-3 md:px-6">
