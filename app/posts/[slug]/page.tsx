@@ -1,10 +1,6 @@
+import { postParam } from "@/lib/data/fetchPost";
 import Link from "next/link";
 
-async function postParam(id: string) {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}posts/${id}`);
-  const data = await res.json();
-  return data;
-}
 export default async function Page({
   params,
 }: {

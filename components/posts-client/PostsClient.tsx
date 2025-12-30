@@ -1,9 +1,15 @@
 import Link from "next/link";
 import { Button } from "../ui/button";
-import { fetchPost } from "@/lib/data/fetchPost";
+import { use } from "react";
+import { Post } from "@/types/post";
 
-export default async function Posts() {
-  const data = await fetchPost();
+export default function PostsClient({
+  postsCient,
+}: {
+  postsCient: Promise<Post[]>;
+}) {
+  const data: Post[] = use(postsCient);
+
   return (
     <div className="my-16 grid grid-cols-3 max-sm:grid-cols-1 gap-8 mx-8">
       {data.map((post) => (
