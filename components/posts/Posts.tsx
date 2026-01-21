@@ -14,7 +14,7 @@ export default async function Posts() {
             </h1>
             <p className="my-3 text-justify line-clamp-3">{post.body}</p>
             <Link key={post.id} href={`/posts/${post.id}`}>
-              <Button className="hover:cursor-pointer hover:scale-105 duration-400 bg-blue-700">
+              <Button className="hover:cursor-pointer hover:scale-105 duration-400 bg-blue-700 hover:bg-blue-800 text-white">
                 Read More
               </Button>
             </Link>
