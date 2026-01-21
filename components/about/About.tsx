@@ -5,7 +5,7 @@ import Link from "next/link";
 export default function About() {
   
   return (
-    <section className="min-h-screen bg-primary text-black/70 py-16 px-6 flex flex-col md:flex-row items-center justify-between gap-15">
+    <section className="min-h-screen text-black/70 py-16 px-6 flex flex-col md:flex-row items-center justify-between gap-15">
       <div className="w-full md:w-5/12 flex justify-center h-full md:justify-end">
         <Image
           src="/images/photo.png"
@@ -19,7 +19,7 @@ export default function About() {
         <div className="absolute left-[40%] -top-6 md:-left-16  lg:top-0 md:top-6 rotate-0 md:rotate-90 text-sm tracking-widest">
           <div className="flex items-center justify-center gap-2">
             <p className="md:rotate-180">MORE ABOUT</p>
-            <div className="w-16 h-0.5 bg-black"></div>
+            <div className="w-16 h-0.5"></div>
           </div>
         </div>
 
@@ -38,7 +38,7 @@ export default function About() {
         <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
           <Link
             href="/"
-            className="bg-tertiary bg-black text-white font-semibold py-2 px-4 rounded-lg hover:bg-tertiary/80 text-center hover:scale-105 transition-transform duration-300"
+            className="bg-tertiary text-white font-semibold py-2 px-4 rounded-lg hover:bg-tertiary/80 text-center hover:scale-105 transition-transform duration-300"
           >
             See Projects
           </Link>

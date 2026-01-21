@@ -12,7 +12,7 @@ export default async function Posts() {
             <h1 className="font-bold text-2xl mb-2 line-clamp-1">
               {post.title}
             </h1>
-            <p className="my-3 text-justify line-clamp-3">{post.body}</p>
+            <p className="my-3 text-justify line-clamp-2">{post.body}</p>
             <Link key={post.id} href={`/posts/${post.id}`}>
               <Button className="hover:cursor-pointer hover:scale-105 duration-400 bg-blue-700 hover:bg-blue-800 text-white">
                 Read More
