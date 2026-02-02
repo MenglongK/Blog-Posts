@@ -14,10 +14,18 @@ import { Label } from "../ui/label";
 import { LoginRequest } from "@/types/login";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
 
 const formSchema = z.object({
   email: z.email("Invalid email address").nonempty(),
-  password: z.string().min(8, "Password must be at least 6 characters").nonempty().regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character"),
+  password: z
+    .string()
+    .min(8, "Password must be at least 6 characters")
+    .nonempty()
+    .regex(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+      "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character",
+    ),
 });
 export default function LoginForm() {
   const {
@@ -39,7 +47,9 @@ export default function LoginForm() {
           Enter your email below to login to your account
         </CardDescription>
         <CardAction>
-          <Button variant="link">Sign Up</Button>
+          <Link href="/signup">
+            <Button variant="link">Sign Up</Button>
+          </Link>
         </CardAction>
       </CardHeader>
       <CardContent>

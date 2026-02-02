@@ -38,7 +38,7 @@ export default function About() {
         <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
           <Link
             href="/"
-            className="bg-tertiary text-white font-semibold py-2 px-4 rounded-lg hover:bg-tertiary/80 text-center hover:scale-105 transition-transform duration-300"
+            className="bg-tertiary bg-black text-white font-semibold py-2 px-4 rounded-lg hover:bg-tertiary/80 text-center hover:scale-105 transition-transform duration-300"
           >
             See Projects
           </Link>

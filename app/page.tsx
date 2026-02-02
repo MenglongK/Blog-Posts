@@ -27,7 +27,7 @@ export default function Home() {
             expertise that drives real results.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/posts">
+            <Link href="/dashboard">
               <button className="bg-white text-indigo-600 px-8 py-4 rounded-lg font-semibold hover:bg-indigo-50 transform hover:scale-105 transition-all duration-300 shadow-lg flex items-center justify-center cursor-pointer">
                 <i data-lucide="rocket" className="w-5 h-5"></i>
                 Get Started

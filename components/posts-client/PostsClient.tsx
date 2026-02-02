@@ -19,7 +19,7 @@ export default function PostsClient({
               {post.title}
             </h1>
             <p className="my-3 text-justify line-clamp-3">{post.body}</p>
-            <Link key={post.id} href={`/posts/${post.id}`}>
+            <Link key={post.id} href={`/dashboard/posts/${post.id}`}>
               <Button className="hover:cursor-pointer hover:scale-105 duration-400 bg-blue-700">
                 Read More
               </Button>

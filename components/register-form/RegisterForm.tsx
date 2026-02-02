@@ -20,6 +20,7 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form";
+import Link from "next/link";
 
 const formSchema = z.object({
   email: z.email("Invalid email address").nonempty(),
@@ -29,7 +30,10 @@ const formSchema = z.object({
     .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
     .regex(/[a-z]/, "Password must contain at least one lowercase letter")
     .regex(/[0-9]/, "Password must contain at least one number")
-    .regex(/[^a-zA-Z0-9]/, "Password must contain at least one special character")
+    .regex(
+      /[^a-zA-Z0-9]/,
+      "Password must contain at least one special character",
+    )
     .nonempty(),
 });
 export default function RegisterForm() {
@@ -43,12 +47,14 @@ export default function RegisterForm() {
   return (
     <Card className="w-full max-w-sm mx-auto my-20">
       <CardHeader>
-        <CardTitle>Login to your account</CardTitle>
+        <CardTitle>Create new account</CardTitle>
         <CardDescription>
-          Enter your email below to login to your account
+          Enter your email below to create to your account
         </CardDescription>
         <CardAction>
-          <Button variant="link">Sign Up</Button>
+          <Link href="/login">
+            <Button variant="link">Login</Button>
+          </Link>
         </CardAction>
       </CardHeader>
       <CardContent>
@@ -69,21 +75,12 @@ export default function RegisterForm() {
                           {...field}
                         />
                       </FormControl>
-                      {/* <FormDescription>
-                        This is your email address
-                      </FormDescription> */}
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-                {/* <p className="text-red-500">{errors.email?.message}</p> */}
               </div>
               <div className="grid gap-2">
-                {/* <Input
-                  id="password"
-                  {...register("password")}
-                  type="password"
-                /> */}
                 <FormField
                   control={control}
                   name="password"
@@ -97,26 +94,33 @@ export default function RegisterForm() {
                           {...field}
                         />
                       </FormControl>
-                      {/* <FormDescription>This is your password</FormDescription> */}
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-                <div className="flex items-center">
-                  <a
-                    href="#"
-                    className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
-                  >
-                    Forgot your password?
-                  </a>
-                </div>
+              </div>
+              <div className="grid gap-2">
+                <FormField
+                  control={control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Confirm password</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="password"
+                          placeholder="**********"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </div>
             </div>
             <Button type="submit" className="w-full">
-              Login
-            </Button>
-            <Button variant="outline" className="w-full">
-              Login with Google
+              Create
             </Button>
           </form>
         </Form>
