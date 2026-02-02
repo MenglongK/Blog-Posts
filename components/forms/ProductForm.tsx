@@ -38,14 +38,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import ProgressUpload from "../file-upload/progress-upload";
+import ImageUpload from "../image-upload";
 
 const formSchema = z.object({
   title: z
     .string()
     .min(5, "Bug title must be at least 5 characters.")
     .max(32, "Bug title must be at most 32 characters."),
-  price: z.number().positive(),
+  price: z.coerce.number().positive(),
   description: z
     .string()
     .min(20, "Description must be at least 20 characters.")
@@ -72,7 +72,7 @@ type FormSchema = z.infer<typeof formSchema>;
 
 export function ProductForm() {
   const form = useForm<FormSchema>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(formSchema) as any,
     defaultValues: {
       title: "",
       price: 0,
@@ -101,7 +101,7 @@ export function ProductForm() {
 
   return (
     <>
-      <Card className="w-full sm:max-w-md my-20 mx-auto">
+      <Card className="w-full sm:max-w-md mt-20 mb-10 mx-auto">
         <CardHeader>
           <CardTitle>Bug Report</CardTitle>
           <CardDescription>
@@ -140,10 +140,12 @@ export function ProductForm() {
                     <FieldLabel htmlFor="form-rhf-demo-title">Price</FieldLabel>
                     <Input
                       {...field}
+                      type="number"
                       id="form-rhf-demo-title"
                       aria-invalid={fieldState.invalid}
                       placeholder="0"
                       autoComplete="off"
+                      onChange={(e) => field.onChange(e.target.valueAsNumber)}
                     />
                     {fieldState.invalid && (
                       <FieldError errors={[fieldState.error]} />
@@ -233,25 +235,26 @@ export function ProductForm() {
               />
             </FieldGroup>
           </form>
+          <div className="w-full sm:max-w-md mx-auto my-5">
+            {" "}
+            <ImageUpload />
+          </div>
+          <CardFooter>
+            <Field orientation="horizontal">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => form.reset()}
+              >
+                Reset
+              </Button>
+              <Button type="submit" form="form-rhf-demo">
+                Submit
+              </Button>
+            </Field>
+          </CardFooter>
         </CardContent>
-        <CardFooter>
-          <Field orientation="horizontal">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => form.reset()}
-            >
-              Reset
-            </Button>
-            <Button type="submit" form="form-rhf-demo">
-              Submit
-            </Button>
-          </Field>
-        </CardFooter>
       </Card>
-      <div className="w-full sm:max-w-md mx-auto mb-20">
-        <ProgressUpload />
-      </div>
     </>
   );
 }
