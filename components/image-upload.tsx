@@ -9,7 +9,7 @@ import { CircleX, CloudUpload, ImageIcon, TriangleAlert, XIcon } from 'lucide-re
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 
-interface ImageFile {
+export interface ImageFile {
   id: string;
   file: File;
   preview: string;
@@ -207,7 +207,7 @@ export default function ImageUpload({
               key={defaultImg.id}
               className="flex items-center justify-center rounded-md bg-accent/50 shadow-none shrink-0 relative group"
             >
-              <Image src="" className="h-30 w-full object-cover rounded-md" alt={defaultImg.alt} width={160} height={120} />
+              <Image src="https://api.escuelajs.co/api/v1/files/fc8e.png" className="h-30 w-full object-cover rounded-md" alt={defaultImg.alt} width={160} height={160} />
 
               {/* Remove Button Overlay for default images too */}
               <Button

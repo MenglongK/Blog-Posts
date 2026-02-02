@@ -1,9 +1,9 @@
 "use client";
 
 import * as React from "react";
+import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
-import { toast } from "sonner";
 import * as z from "zod";
 
 import { Button } from "@/components/ui/button";
@@ -38,7 +38,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import ImageUpload from "../image-upload";
+import ImageUpload, { ImageFile } from "../image-upload";
+import { uploadImageToServer } from "@/lib/data/uploadImage";
 
 const formSchema = z.object({
   title: z
@@ -56,6 +57,7 @@ const formSchema = z.object({
     .refine((value) => value !== "auto", {
       message: "Please select a specific language instead of 'Auto'.",
     }),
+  Image: z.any(),
 });
 
 const spokenLanguages = [
@@ -71,6 +73,8 @@ const spokenLanguages = [
 type FormSchema = z.infer<typeof formSchema>;
 
 export function ProductForm() {
+  const [images, setImage] = useState<ImageFile[]>([]);
+  const formData = new FormData();
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema) as any,
     defaultValues: {
@@ -78,30 +82,31 @@ export function ProductForm() {
       price: 0,
       description: "",
       category: "",
+      Image: [""],
     },
   });
   const { handleSubmit, control } = form;
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
-    toast("You submitted the following values:", {
-      description: (
-        <pre className="bg-code text-code-foreground mt-2 w-[320px] overflow-x-auto rounded-md p-4">
-          <code>{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-      position: "bottom-right",
-      classNames: {
-        content: "flex flex-col gap-2",
-      },
-      style: {
-        "--border-radius": "calc(var(--radius)  + 4px)",
-      } as React.CSSProperties,
-    });
+  async function onSubmit(data: z.infer<typeof formSchema>) {
+    // 1. upload image to server
+    // 2. after upload image suceeds, use image link to insert object product
+    // 3. upload products{title, price, description, category, imageLink}
+
+    for (const image of images) {
+      formData.append("file", image.file);
+    }
+    const imageFromUpload = await uploadImageToServer(formData);
+    console.log("upload to server", imageFromUpload);
+    data.Image = [imageFromUpload.data.location];
+    console.log("Submit click", data);
+  }
+  function handleImageUpload(images: ImageFile[]) {
+    setImage(images);
   }
 
   return (
     <>
-      <Card className="w-full sm:max-w-md mt-20 mb-10 mx-auto">
+      <Card className="w-full sm:max-w-md mt-20 mb-10 py-5 mx-auto">
         <CardHeader>
           <CardTitle>Bug Report</CardTitle>
           <CardDescription>
@@ -123,7 +128,7 @@ export function ProductForm() {
                       {...field}
                       id="form-rhf-demo-title"
                       aria-invalid={fieldState.invalid}
-                      placeholder="Login button not working on mobile"
+                      placeholder="Enter bug title"
                       autoComplete="off"
                     />
                     {fieldState.invalid && (
@@ -212,7 +217,7 @@ export function ProductForm() {
                       <InputGroupTextarea
                         {...field}
                         id="form-rhf-demo-description"
-                        placeholder="I'm having an issue with the login button on mobile."
+                        placeholder="Describe the bug in detail"
                         rows={6}
                         className="min-h-24 resize-none"
                         aria-invalid={fieldState.invalid}
@@ -233,12 +238,31 @@ export function ProductForm() {
                   </Field>
                 )}
               />
+              <Controller
+                name="Image"
+                control={control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="form-rhf-demo-image-upload">
+                      Image Upload
+                    </FieldLabel>
+                    <ImageUpload
+                      {...field}
+                      aria-invalid={fieldState.invalid}
+                      onImagesChange={handleImageUpload}
+                    />
+                    <FieldDescription>
+                      Include steps to reproduce, expected behavior, and what
+                      actually happened.
+                    </FieldDescription>
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
             </FieldGroup>
           </form>
-          <div className="w-full sm:max-w-md mx-auto my-5">
-            {" "}
-            <ImageUpload />
-          </div>
           <CardFooter>
             <Field orientation="horizontal">
               <Button
