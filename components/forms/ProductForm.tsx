@@ -45,7 +45,7 @@ const formSchema = z.object({
     .string()
     .min(5, "Bug title must be at least 5 characters.")
     .max(32, "Bug title must be at most 32 characters."),
-  price: z.coerce.number().positive(),
+  price: z.number().positive(),
   description: z
     .string()
     .min(20, "Description must be at least 20 characters.")
