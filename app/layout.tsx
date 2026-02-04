@@ -34,7 +34,8 @@ export default function RootLayout({
       >
         <Suspense fallback={<Loading />}>
           <Navbar />
-          {children}
+          <main>{children}</main>
+          <Toaster position="bottom-right" richColors />
           <Footer />
         </Suspense>
       </body>
