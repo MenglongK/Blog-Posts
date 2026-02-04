@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
 };
 module.exports = {
   images: {
-    remotePatterns: [new URL('https://api.escuelajs.co/api/v1/files/**')],
+    remotePatterns: [new URL('https://i.imgur.com/**')],
   },
 }
 

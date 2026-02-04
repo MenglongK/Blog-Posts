@@ -40,6 +40,11 @@ import {
 } from "../ui/select";
 import ImageUpload, { ImageFile } from "../image-upload";
 import { uploadImageToServer } from "@/lib/data/uploadImage";
+import { fetchCategories } from "@/lib/data/categories";
+import { Category } from "@/types/category";
+import { toast } from "sonner";
+import { ProductRequest } from "@/types/product";
+import { uploadProductToAPI } from "@/lib/data/uploadProduct";
 
 const formSchema = z.object({
   title: z
@@ -60,20 +65,29 @@ const formSchema = z.object({
   Image: z.any(),
 });
 
-const spokenLanguages = [
-  { label: "English", value: "en" },
-  { label: "Spanish", value: "es" },
-  { label: "French", value: "fr" },
-  { label: "German", value: "de" },
-  { label: "Italian", value: "it" },
-  { label: "Chinese", value: "zh" },
-  { label: "Japanese", value: "ja" },
-] as const;
+// const spokenLanguages = [
+//   { label: "English", value: "en" },
+//   { label: "Spanish", value: "es" },
+//   { label: "French", value: "fr" },
+//   { label: "German", value: "de" },
+//   { label: "Italian", value: "it" },
+//   { label: "Chinese", value: "zh" },
+//   { label: "Japanese", value: "ja" },
+// ] as const;
 
 type FormSchema = z.infer<typeof formSchema>;
 
 export function ProductForm() {
+  const [data, setData] = useState<Category[]>([]);
+  React.useEffect(() => {
+    async function loadCategories() {
+      const categories = await fetchCategories();
+      setData(categories);
+    }
+    loadCategories();
+  }, []);
   const [images, setImage] = useState<ImageFile[]>([]);
+  const [product, setProduct] = useState<ProductRequest[]>([]);
   const formData = new FormData();
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema) as any,
@@ -97,20 +111,32 @@ export function ProductForm() {
     }
     const imageFromUpload = await uploadImageToServer(formData);
     console.log("upload to server", imageFromUpload);
-    data.Image = [imageFromUpload.data.location];
+    if (imageFromUpload.status === 201) {
+      return toast.success("Image uploaded successfully!");
+    }
+    if (imageFromUpload) {
+      data.Image = [imageFromUpload.data.location];
+    }
     console.log("Submit click", data);
+
+    const productFromUpload = await uploadProductToAPI(formData);
+    console.log("upload product to api", productFromUpload);
+    console.log(product)
   }
   function handleImageUpload(images: ImageFile[]) {
     setImage(images);
+  }
+  function handleProductUpload(product: ProductRequest[]) {
+    setProduct(product);
   }
 
   return (
     <>
       <Card className="w-full sm:max-w-md mt-20 mb-10 py-5 mx-auto">
         <CardHeader>
-          <CardTitle>Bug Report</CardTitle>
+          <CardTitle>Product Report</CardTitle>
           <CardDescription>
-            Help us improve by reporting bugs you encounter.
+            Help us improve by reporting products you encounter.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -122,13 +148,13 @@ export function ProductForm() {
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
                     <FieldLabel htmlFor="form-rhf-demo-title">
-                      Bug Title
+                      Product Title
                     </FieldLabel>
                     <Input
                       {...field}
                       id="form-rhf-demo-title"
                       aria-invalid={fieldState.invalid}
-                      placeholder="Enter bug title"
+                      placeholder="Enter product title"
                       autoComplete="off"
                     />
                     {fieldState.invalid && (
@@ -168,10 +194,10 @@ export function ProductForm() {
                   >
                     <FieldContent>
                       <FieldLabel htmlFor="form-rhf-select-language">
-                        Spoken Language
+                        Categories
                       </FieldLabel>
                       <FieldDescription>
-                        For best results, select the language you speak.
+                        For best results, select the category of the product.
                       </FieldDescription>
                       {fieldState.invalid && (
                         <FieldError errors={[fieldState.error]} />
@@ -190,14 +216,11 @@ export function ProductForm() {
                         <SelectValue placeholder="Select" />
                       </SelectTrigger>
                       <SelectContent position="item-aligned">
-                        <SelectItem value="auto">Auto</SelectItem>
+                        {/* <SelectItem value="auto">Auto</SelectItem> */}
                         <SelectSeparator />
-                        {spokenLanguages.map((language) => (
-                          <SelectItem
-                            key={language.value}
-                            value={language.value}
-                          >
-                            {language.label}
+                        {data.map((category) => (
+                          <SelectItem key={category.name} value={category.name}>
+                            {category.name}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -217,7 +240,7 @@ export function ProductForm() {
                       <InputGroupTextarea
                         {...field}
                         id="form-rhf-demo-description"
-                        placeholder="Describe the bug in detail"
+                        placeholder="Describe the product in detail"
                         rows={6}
                         className="min-h-24 resize-none"
                         aria-invalid={fieldState.invalid}
@@ -272,7 +295,10 @@ export function ProductForm() {
               >
                 Reset
               </Button>
-              <Button type="submit" form="form-rhf-demo">
+              <Button
+                type="submit"
+                form="form-rhf-demo"
+              >
                 Submit
               </Button>
             </Field>

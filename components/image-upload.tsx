@@ -45,19 +45,55 @@ export default function ImageUpload({
     { id: 'default-4', src: 'https://picsum.photos/400/300?random=4', alt: 'Product view 4' },
   ]);
 
-  const validateFile = (file: File): string | null => {
-    if (!file.type.startsWith('image/')) {
-      return 'File must be an image';
-    }
-    if (file.size > maxSize) {
-      return `File size must be less than ${(maxSize / 1024 / 1024).toFixed(1)}MB`;
-    }
-    if (images.length >= maxFiles) {
-      return `Maximum ${maxFiles} files allowed`;
-    }
-    console.log("picture",file)
-    return null;
-  };
+  const validateFile = useCallback(
+    (file: File): string | null => {
+      if (!file.type.startsWith('image/')) {
+        return 'File must be an image';
+      }
+      if (file.size > maxSize) {
+        return `File size must be less than ${(maxSize / 1024 / 1024).toFixed(1)}MB`;
+      }
+      if (images.length >= maxFiles) {
+        return `Maximum ${maxFiles} files allowed`;
+      }
+      console.log("picture",file)
+      return null;
+    },
+    [maxSize, maxFiles, images.length],
+  );
+
+  const simulateUpload = useCallback(
+    (imageFile: ImageFile) => {
+      let progress = 0;
+      const interval = setInterval(() => {
+        progress += Math.random() * 20;
+        if (progress >= 100) {
+          progress = 100;
+          clearInterval(interval);
+
+          setImages((prev) =>
+            prev.map((img) => (img.id === imageFile.id ? { ...img, progress: 100, status: 'completed' as const } : img)),
+          );
+
+          // Check if all uploads are complete
+          setImages((prev) => {
+            const updatedImages = prev.map((img) =>
+              img.id === imageFile.id ? { ...img, progress: 100, status: 'completed' as const } : img,
+            );
+
+            if (updatedImages.every((img) => img.status === 'completed')) {
+              onUploadComplete?.(updatedImages);
+            }
+
+            return updatedImages;
+          });
+        } else {
+          setImages((prev) => prev.map((img) => (img.id === imageFile.id ? { ...img, progress } : img)));
+        }
+      }, 100);
+    },
+    [onUploadComplete],
+  );
 
   const addImages = useCallback(
     (files: FileList | File[]) => {
@@ -97,34 +133,8 @@ export default function ImageUpload({
         });
       }
     },
-    [images, maxSize, maxFiles, onImagesChange],
+    [images, onImagesChange, validateFile, simulateUpload],
   );
-
-  const simulateUpload = (imageFile: ImageFile) => {
-    let progress = 0;
-    const interval = setInterval(() => {
-      progress += Math.random() * 20;
-      if (progress >= 100) {
-        progress = 100;
-        clearInterval(interval);
-
-        setImages((prev) =>
-          prev.map((img) => (img.id === imageFile.id ? { ...img, progress: 100, status: 'completed' as const } : img)),
-        );
-
-        // Check if all uploads are complete
-        const updatedImages = images.map((img) =>
-          img.id === imageFile.id ? { ...img, progress: 100, status: 'completed' as const } : img,
-        );
-
-        if (updatedImages.every((img) => img.status === 'completed')) {
-          onUploadComplete?.(updatedImages);
-        }
-      } else {
-        setImages((prev) => prev.map((img) => (img.id === imageFile.id ? { ...img, progress } : img)));
-      }
-    }, 100);
-  };
 
   const removeImage = useCallback((id: string) => {
     // If it's a default image, remove it from visible defaults
@@ -207,7 +217,7 @@ export default function ImageUpload({
               key={defaultImg.id}
               className="flex items-center justify-center rounded-md bg-accent/50 shadow-none shrink-0 relative group"
             >
-              <Image src="https://api.escuelajs.co/api/v1/files/fc8e.png" className="h-30 w-full object-cover rounded-md" alt={defaultImg.alt} width={160} height={160} />
+              <Image src="https://i.imgur.com/QkIa5tT.jpeg" className="h-30 w-full object-cover rounded-md" alt={defaultImg.alt} width={160} height={160} />
 
               {/* Remove Button Overlay for default images too */}
               <Button
